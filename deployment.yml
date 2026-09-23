@@ -23,32 +23,6 @@ spec:
           image: nginx:1.28@sha256:146adea4768b83c607d0bdfa4188464e3da6e0a3ad4475db1d1d8f64f27c29cc
           ports:
             - containerPort: 80
-      initContainers:
-        - name: wait-for-db
-          image: busybox:1.36@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662
-
-          command: ['sh', '-c', 'until nc -z db-service 5432; do sleep 2; done']
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: busybox
-  namespace: demo-app
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: busybox
-  template:
-    metadata:
-      labels:
-        app: busybox
-    spec:
-      containers:
-        - name: listener
-          image: busybox:1.36@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662
-          command: ['sh', '-c', 'while true; do nc -l -p 5432; done']
-
 ---
 apiVersion: v1
 kind: Service
@@ -61,19 +35,4 @@ spec:
   ports:
     - port: 81
       targetPort: 80
-  type: ClusterIP
-
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: db-service
-  namespace: demo-app
-spec:
-  selector:
-    app: busybox
-  ports:
-    - port: 5432
-      targetPort: 5432
   type: ClusterIP
