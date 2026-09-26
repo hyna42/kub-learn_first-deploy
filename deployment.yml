@@ -15,6 +15,7 @@ spec:
     rollingUpdate:
       maxSurge: 1 # combien de Pods en surplus
       maxUnavailable: 1 # combien de Pods indisponible
+  revisionHistoryLimit: 5 # limiter l'historique des révisions
   progressDeadlineSeconds: 600
   minReadySeconds: 10
   selector:
@@ -27,7 +28,7 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: nginx:1.31@sha256:abe47724e466aeab9a345d8e46a221c2fa8953c7848bb4a3bd9976a7199f8cf2 # anciennement 1.28 # anciennement 1.28
+          image: nginx:1.31@sha256:abe47724e466aeab9a345d8e46a221c2fa8953c7848bb4a3bd9976a7199f8cf2 # anciennement 1.28
           readinessProbe:
             httpGet:
               path: /
