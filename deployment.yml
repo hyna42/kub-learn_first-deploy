@@ -39,6 +39,9 @@ spec:
             periodSeconds: 3
           ports:
             - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: app-settings
 ---
 apiVersion: v1
 kind: Service
