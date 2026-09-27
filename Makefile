@@ -17,4 +17,4 @@ get-all:
 cluster-start:
 	k3d cluster start $(CLUSTER)
 cluster-stop:
-	k3d cluster stop $(CLUSTER)
+	k3d cluster stop $(CLUSTER)		

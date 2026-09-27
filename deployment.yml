@@ -8,6 +8,8 @@ kind: Deployment
 metadata:
   name: nginx
   namespace: demo-app
+  annotations:
+    kubernetes.io/change-cause: "Passage nginx 1.31 - patch correctif"
 spec:
   replicas: 2
   strategy:
