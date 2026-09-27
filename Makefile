@@ -1,4 +1,5 @@
 CLUSTER ?= app-cluster
+MANIFEST ?= deployment.yml
 
 # INFRA INIT
 init-cluster-and-deploy:
@@ -9,6 +10,8 @@ deployment:
 get-all:
 	@kubectl get all -n demo-app
 
+apply:
+	@kubectl apply -f $(MANIFEST)
 
 # NODES
 

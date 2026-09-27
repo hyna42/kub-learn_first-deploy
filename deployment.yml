@@ -43,12 +43,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx
+  name: nginx-service
   namespace: demo-app
 spec:
   selector:
     app: nginx
   ports:
-    - port: 81
+    - protocol: TCP
+      port: 80
       targetPort: 80
   type: ClusterIP
