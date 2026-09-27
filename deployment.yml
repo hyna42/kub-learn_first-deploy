@@ -41,7 +41,7 @@ spec:
             - containerPort: 80
           envFrom:
             - configMapRef:
-                name: app-settings
+                name: app-settings-v2
 ---
 apiVersion: v1
 kind: Service
