@@ -43,18 +43,22 @@ spec:
           envFrom:
             - configMapRef:
                 name: app-settings
-          # injecter les Secrets
-          env:
-            - name: DB_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: db-credentials
-                  key: username
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: db-credentials
-                  key:  password
+          # injecter les Secrets avec env
+          # env:
+          #   - name: DB_USERNAME
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: db-credentials
+          #         key: username
+          #   - name: DB_PASSWORD
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: db-credentials
+          #         key:  password
+          # injecter les Secrets avec envFrom
+            - secretRef:
+                name: db-credentials
+
 
 ---
 apiVersion: v1
