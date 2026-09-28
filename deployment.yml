@@ -58,6 +58,18 @@ spec:
           # injecter les Secrets avec envFrom
             - secretRef:
                 name: db-credentials
+          # Monter un volume
+          volumeMounts:
+          - name: secret-volume
+            mountPath: /etc/secrets
+            readOnly: true
+      volumes:
+      - name: secret-volume
+        secret:
+          secretName: db-credentials
+          items:
+          - key: environnment
+            path: db-env  
 
 
 ---
