@@ -1,8 +1,3 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: demo-app
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -43,22 +38,10 @@ spec:
           envFrom:
             - configMapRef:
                 name: app-settings
-          # injecter les Secrets avec env
-          # env:
-          #   - name: DB_USERNAME
-          #     valueFrom:
-          #       secretKeyRef:
-          #         name: db-credentials
-          #         key: username
-          #   - name: DB_PASSWORD
-          #     valueFrom:
-          #       secretKeyRef:
-          #         name: db-credentials
-          #         key:  password
           # injecter les Secrets avec envFrom
             - secretRef:
                 name: db-credentials
-          # Monter un volume
+          # Monter un Secret en volume
           volumeMounts:
           - name: secret-volume
             mountPath: /etc/secrets
