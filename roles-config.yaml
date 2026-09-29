@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: abdou
+  namespace: demo-app
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: team-backend-developer
+  namespace: demo-app
+rules:
+- apiGroups: ["", "apps", "batch"]
+  resources: ["pods", "deployments", "services", "configmaps", "secrets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+- apiGroups: [""]
+  resources: ["pods/log", "pods/exec"]
+  verbs: ["get", "create"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: team-backend-developers
+  namespace: demo-app
+subjects:
+- kind: ServiceAccount
+  name: abdou
+  namespace: demo-app
+roleRef:
+  kind: Role
+  name: team-backend-developer
+  apiGroup: rbac.authorization.k8s.io
