@@ -8,3 +8,13 @@ patches:
   - path: deployment-patch.yaml
 
 namespace: my-app-dev
+
+configMapGenerator:
+  - name: app-config
+    literals:
+      - APP_ENV=development
+      - LOG_LEVEL=debug
+secretGenerator:
+  - name: db-secret
+    files:
+      - DB_PASSWORD=secrets/db-password.txt

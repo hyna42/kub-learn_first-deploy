@@ -8,3 +8,8 @@ patches:
   - path: deployment-patch.yaml
 
 namespace: my-app-prod
+
+secretGenerator:
+  - name: db-secret
+    files:
+      - DB_PASSWORD=secrets/db-password.txt

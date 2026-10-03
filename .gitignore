@@ -1,3 +1,4 @@
 secret-stringdata.yaml
 app-config.yaml
 app-config-v2.yaml
+overlays/*/secrets/
