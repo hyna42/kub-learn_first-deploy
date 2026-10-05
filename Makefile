@@ -24,6 +24,8 @@ cluster-delete:
 ns:
 	@kubectl apply -f namespace.yaml
 
+use-ns:
+	@kubectl config set-context --current --namespace=$(NAMESPACE)
 # VALIDATION
 validate-client:
 	@kubectl apply --dry-run=client $(FILES)
@@ -38,7 +40,8 @@ check: validate-client validate-server diff
 
 # DEPLOYMENT
 deploy: check
-	@kubectl apply $(FILES)	
+	@kubectl apply $(FILES)
+	
 get-all:
 	@kubectl get all -n $(NAMESPACE)
 # ***********************************************************************

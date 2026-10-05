@@ -35,6 +35,8 @@ spec:
             periodSeconds: 3
           ports:
             - containerPort: 80
+      imagePullSecrets:
+        - name: regcred
 ---
 apiVersion: v1
 kind: Service
