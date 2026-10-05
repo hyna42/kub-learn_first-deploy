@@ -1,26 +1,13 @@
 # VARIABLES
 CLUSTER ?= app-cluster
-MANIFEST ?= deployment.yaml
 NAMESPACE ?= demo-app
 SERVER ?= 1
 AGENTS ?= 2
 
-# INFRA INIT
-init-cluster-and-deploy:
-	@./script.sh
+MANIFESTS = namespace.yaml network-policy.yaml deployment.yaml
+FILES     = $(addprefix -f ,$(MANIFESTS))
 
-deploy:
-	@kubectl apply -f namespace.yaml
-	@kubectl apply -f network-policy.yaml
-	@kubectl apply -f roles-config.yaml
-	@kubectl apply -f app-config.yaml
-	@kubectl apply -f secret-stringdata.yaml
-	@kubectl apply -f deployment.yaml
-get-all:
-	@kubectl get all -n $(NAMESPACE)
-
-# NODES
-
+.PHONY: ns validate-client validate-server diff check deploy get-all cluster-create cluster-start cluster-stop cluster-delete
 
 # CLUSTER
 cluster-create:
@@ -30,4 +17,28 @@ cluster-start:
 cluster-stop:
 	k3d cluster stop $(CLUSTER)
 cluster-delete:
-	k3d cluster delete $(CLUSTER)				
+	k3d cluster delete $(CLUSTER)	
+# ***********************************************************************
+
+# BOOTSTRAP
+ns:
+	@kubectl apply -f namespace.yaml
+
+# VALIDATION
+validate-client:
+	@kubectl apply --dry-run=client $(FILES)
+
+validate-server: ns
+	@kubectl apply --dry-run=server $(FILES)
+
+diff: ns
+	@kubectl diff $(FILES) || true
+
+check: validate-client validate-server diff
+
+# DEPLOYMENT
+deploy: check
+	@kubectl apply $(FILES)	
+get-all:
+	@kubectl get all -n $(NAMESPACE)
+# ***********************************************************************

@@ -26,6 +26,7 @@ spec:
       containers:
         - name: nginx
           image: nginx:1.31@sha256:abe47724e466aeab9a345d8e46a221c2fa8953c7848bb4a3bd9976a7199f8cf2 # anciennement 1.28
+          imagePullPolicy: IfNotPresent
           readinessProbe:
             httpGet:
               path: /
@@ -34,27 +35,6 @@ spec:
             periodSeconds: 3
           ports:
             - containerPort: 80
-          # injecter TOUS les variables d'environnement
-          envFrom:
-            - configMapRef:
-                name: app-settings
-          # injecter les Secrets avec envFrom
-            - secretRef:
-                name: db-credentials
-          # Monter un Secret en volume
-          volumeMounts:
-          - name: secret-volume
-            mountPath: /etc/secrets
-            readOnly: true
-      volumes:
-      - name: secret-volume
-        secret:
-          secretName: db-credentials
-          items:
-          - key: environnment
-            path: db-env  
-
-
 ---
 apiVersion: v1
 kind: Service
