@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  config.json: |
+    {
+      "database": "postgresql",
+      "port": 5432
+    }
+  settings.ini: |
+    [app]
+    debug = false
+    log_level = info
