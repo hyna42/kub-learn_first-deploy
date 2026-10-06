@@ -11,4 +11,4 @@ data:
   settings.ini: |
     [app]
     debug = false
-    log_level = info
+    log_level = info 
