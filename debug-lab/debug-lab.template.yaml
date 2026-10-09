@@ -1,0 +1,140 @@
+# debug-lab — manifest CASSÉ (point de départ du lab)
+# 8 ressources, chacune avec une panne différente. Ne pas lire avant de chercher !
+# Lancer :  k create ns debug-lab --dry-run=client -o yaml | k apply -f -
+#           k apply -f debug-lab.template.yaml
+#           k config set-context --current --namespace=debug-lab
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: debug-lab
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: api
+  namespace: debug-lab
+spec:
+  containers:
+  - name: api
+    image: busybox:1.37
+    command: ["sh", "-c", "echo 'starting api...'; if [ -z \"$DATABASE_URL\" ]; then echo 'FATAL: DATABASE_URL not set' >&2; exit 1; fi; echo \"connected to $DATABASE_URL\"; sleep 3600"]
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: worker
+  namespace: debug-lab
+spec:
+  containers:
+  - name: worker
+    image: nginx:1.99.9
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: reports
+  namespace: debug-lab
+spec:
+  containers:
+  - name: reports
+    image: busybox:1.37
+    command: ["sleep", "3600"]
+    resources:
+      requests:
+        cpu: "64"
+        memory: 64Mi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cache
+  namespace: debug-lab
+spec:
+  containers:
+  - name: cache
+    image: polinux/stress
+    command: ["stress"]
+    args: ["--vm", "1", "--vm-bytes", "250M", "--vm-hang", "1"]
+    resources:
+      requests: { cpu: 50m, memory: 64Mi }
+      limits:   { cpu: 200m, memory: 100Mi }
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: batch
+  namespace: debug-lab
+spec:
+  containers:
+  - name: batch
+    image: nginx:1.31
+    envFrom:
+    - configMapRef:
+        name: batch-config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  namespace: debug-lab
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: web }
+  template:
+    metadata:
+      labels: { app: web }
+    spec:
+      containers:
+      - name: web
+        image: nginx:1.31
+        ports: [{ containerPort: 80 }]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-svc
+  namespace: debug-lab
+spec:
+  selector: { app: website }
+  ports: [{ port: 80, targetPort: 80 }]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front
+  namespace: debug-lab
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: front }
+  template:
+    metadata:
+      labels: { app: front }
+    spec:
+      containers:
+      - name: front
+        image: nginx:1.31
+        ports: [{ containerPort: 80 }]
+        readinessProbe:
+          httpGet: { path: /healthz, port: 80 }
+          periodSeconds: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: front-svc
+  namespace: debug-lab
+spec:
+  selector: { app: front }
+  ports: [{ port: 80, targetPort: 80 }]
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: legacy
+  namespace: debug-lab
+spec:
+  containers:
+  - name: app
+    image: registry.k8s.io/pause:3.10
