@@ -4,7 +4,7 @@ NAMESPACE ?= demo-app
 SERVER ?= 1
 AGENTS ?= 2
 
-MANIFESTS = namespace.yaml network-policy.yaml deployment.yaml
+MANIFESTS = namespace.yaml network-policy.yaml webapp-deployment.yaml
 FILES     = $(addprefix -f ,$(MANIFESTS))
 
 .PHONY: ns validate-client validate-server diff check deploy get-all cluster-create cluster-start cluster-stop cluster-delete
