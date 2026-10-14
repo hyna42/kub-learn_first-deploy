@@ -41,7 +41,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-service
+  name: webapp-service
   namespace: demo-app
 spec:
   selector:

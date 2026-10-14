@@ -31,7 +31,6 @@ cluster-delete:
 # BOOTSTRAP
 ns:
 	@kubectl apply -f namespace.yaml
-
 use-ns:
 	@kubectl config set-context --current --namespace=$(NAMESPACE)
 # VALIDATION
@@ -52,4 +51,10 @@ deploy: check
 	
 get-all:
 	@kubectl get all -n $(NAMESPACE)
-# ***********************************************************************
+
+# CUSTOM
+custom-ns:
+	@kubectl create namespace $(NAMESPACE) \
+		--dry-run=client -o yaml | kubectl apply -f -
+use-custom-ns:
+	@kubectl config set-context --current --namespace=$(NAMESPACE)
