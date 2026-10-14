@@ -1,0 +1,10 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: traefik          # doit porter le nom du chart intégré
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    providers:
+      kubernetesGateway:
+        enabled: true
