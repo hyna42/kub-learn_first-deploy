@@ -13,12 +13,9 @@ FILES     = $(addprefix -f ,$(MANIFESTS))
 cluster-create:
 	@k3d cluster create $(CLUSTER) \
 	  --servers=$(SERVER) --agents=$(AGENTS)
-	@$(MAKE) cluster-gateway
 
 cluster-gateway:
 	@kubectl apply -f traefik-helmchartconfig.yaml
-	@kubectl wait --for=condition=Accepted \
-	  gatewayclass/traefik --timeout=180s
 
 cluster-start:
 	k3d cluster start $(CLUSTER)
