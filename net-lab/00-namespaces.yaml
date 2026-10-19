@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: shop
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: shop-edge
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: shared
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring
