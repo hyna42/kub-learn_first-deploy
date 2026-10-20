@@ -1,0 +1,39 @@
+#le Pod réclame un PVC, le PVC déclenche la StorageClass, la StorageClass fait provisionner le volume
+# 1. StorageClass (à adapter selon environnement)
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: standard
+provisioner: rancher.io/local-path  # Exemple avec local-path-provisioner
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer
+---
+# 2. PVC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: app-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: standard
+---
+# 3. Pod qui utilise le PVC
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-with-storage
+spec:
+  containers:
+    - name: app
+      image: nginx:1.29-alpine@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de
+      volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: data
+  volumes:
+    - name: data
+      persistentVolumeClaim:
+        claimName: app-data
