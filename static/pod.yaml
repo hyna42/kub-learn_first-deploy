@@ -14,4 +14,4 @@ spec:
   volumes:
     - name: storage
       persistentVolumeClaim:
-        claimName: my-pvc
+        claimName: static-pvc
