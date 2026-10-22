@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-deployment-nfs
+  namespace: demo-app
+spec:
+  accessModes:
+    - ReadWriteMany 
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: nfs-csi # Utilisation de la StorageClass 
+  

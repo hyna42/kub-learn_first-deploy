@@ -1,0 +1,34 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-nfs
+  namespace: demo-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: deployment-nfs
+  template:
+    metadata:
+      name: deployment-nfs
+      labels:
+        name: deployment-nfs
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": linux
+      containers:
+        - name: deployment-nfs
+          image: nginx:1.31@sha256:8632b3314d74c61f0e27f59055bab13f7793b988c94c090154d867bc29e0f39b
+          command:
+            - "/bin/bash"
+            - "-c"
+            - set -euo pipefail; while true; do echo $(hostname) $(date) >> /mnt/nfs/outfile; sleep 1; done
+          volumeMounts:
+            - name: nfs
+              mountPath: "/mnt/nfs"
+              readOnly: false
+      volumes:
+        - name: nfs
+          persistentVolumeClaim:
+            claimName: pvc-deployment-nfs
