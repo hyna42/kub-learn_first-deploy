@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: dynamic-test
-  namespace: demo-app
+  namespace: test-dyn
 spec:
   containers:
     - name: app
