@@ -141,7 +141,7 @@ metadata:
   namespace: shared
 spec:
   selector:
-    app: catalogue
+    app: catalog
   ports:
   - port: 80
     targetPort: 8080
