@@ -27,7 +27,7 @@ spec:
               kubernetes.io/metadata.name: kube-system
           podSelector:
             matchLabels:
-              k8s-app: coredns
+              k8s-app: kube-dns
       ports:
         - protocol: UDP
           port: 53
@@ -95,7 +95,7 @@ spec:
               app: frontend
       ports:
         - protocol: TCP
-          port: 80
+          port: 8080
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
