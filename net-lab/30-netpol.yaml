@@ -155,8 +155,10 @@ spec:
         - podSelector:
             matchLabels:
               app: api
-        - namespaceSelector: {}
-        - podSelector:
+        - namespaceSelector:
+            matchLabels:
+              name: monitoring
+          podSelector:
             matchLabels:
               app: prometheus
       ports:
